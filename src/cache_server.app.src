@@ -1,0 +1,21 @@
+{application, cache_server,
+ [
+  {description, "Simple http cache server"},
+  {vsn, "0.1.0"},
+  {registered, [cache_server_sup]},
+  {applications, [
+                  kernel,
+                  stdlib,
+                  crypto,
+                  ranch,
+                  cowlib,
+                  cowboy,
+                  jsx
+                 ]},
+  {modules, ['cache_server', 'cache_server_app', 'cache_server_http', 'cache_server_sup']},
+  {mod, { cache_server_app, []}},
+  {env, []}
+ ]}.
+
+
+
