@@ -13,7 +13,10 @@
     insert/4,
     lookup/2,
     lookup_by_date/3,
-    delete_obsolete/1
+    delete_obsolete/1,
+    date_binary_to_erlang_time/1,
+    proplist_to_result/1
+    
 ]).
 
 
@@ -137,3 +140,23 @@ lookup_by_range(TableName, Key, DateFrom, DateTo, AccList) ->
         _ -> AccList
     end,
     lookup_by_range(TableName, NextKey, DateFrom, DateTo, NewAccList).
+
+
+date_binary_to_erlang_time(DateTimeBin) ->
+    [DateBin, TimeBin] = binary:split(DateTimeBin, <<" ">>),
+    [YearBin, MonthBin, DayBin] = binary:split(DateBin, <<"/">>, [global]),
+    [HBin, MBin, SecBin]= binary:split(TimeBin, <<":">>, [global]),
+    {
+        {binary_to_integer(YearBin), binary_to_integer(MonthBin), binary_to_integer(DayBin)},
+        {binary_to_integer(HBin), binary_to_integer(MBin), binary_to_integer(SecBin)}
+    }.
+
+proplist_to_result(PropList) ->
+    lists:foldl(
+        fun({Key, Value}, AccList) ->
+            P1 = [{<<"key">>, Key}, {<<"value">>, Value}],
+            [P1 | AccList]
+        end,
+        [],
+        PropList
+    ).

@@ -35,10 +35,7 @@ request_fun(#{<<"action">> := <<"lookup">>} = DataMap) ->
 request_fun(#{<<"action">> := <<"lookup_by_date">>} = DataMap) ->
     DateFromBin = maps:get(<<"date_from">>, DataMap),
     DateToBin = maps:get(<<"date_to">>, DataMap),
-	io:format("DateFromBin::~p~n", [DateFromBin]),
     DateFrom = cache_server:date_binary_to_erlang_time(DateFromBin),
-	
-	io:format("DateFrom::~p~n", [DateFrom]),
     DateTo = cache_server:date_binary_to_erlang_time(DateToBin),
     {ok, KeyValueList} = cache_server:lookup_by_date(?TABLENAME, DateFrom, DateTo),
     Result = cache_server:proplist_to_result(KeyValueList),
